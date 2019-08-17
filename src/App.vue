@@ -1,5 +1,7 @@
 <template lang="pug">
   #app
+    pm-header
+    
     section.section
       nav.nav.has-shadow
         .field.has-addons
@@ -12,8 +14,8 @@
       .container.custom
         .colums
           .colum(v-for= "t in canciones") {{ t.nombre }} - {{ t.artista }}
-          
-          
+    
+    pm-footer
 </template>
 
 <script>
@@ -23,8 +25,14 @@ const canciones = [
   { nombre: "Atrevete", artista: "Calle 13" },
   { nombre: "Nadie como tu", artista: "Calle 13" }
 ];
+import PmFooter from "./components/layout/Footer.vue";
+import PmHeader from "./components/layout/Header.vue";
 export default {
   name: "app",
+  components: {
+    PmFooter,
+    PmHeader
+  },
   data() {
     return {
       canciones: [],
