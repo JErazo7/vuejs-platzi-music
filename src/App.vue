@@ -1,8 +1,8 @@
 <template lang="pug">
   #app
     pm-header
-    
-    section.section
+    pm-loader(v-show="isLoading")
+    section.section(v-show="!isLoading")
       nav.nav.has-shadow
         .field.has-addons
           input.input.is-large(
@@ -11,37 +11,44 @@
             v-model="searchQuery")
           a.button.is-info.is-large(@click="search") Buscar
           a.button.is-danger.is-large &times
-      .container.custom
-        .colums
-          .colum(v-for= "t in canciones") {{ t.nombre }} - {{ t.artista }}
-    
+      
+      .container.results
+        .colums.is-multiline
+          .column.is-one-quarter(v-for= "t in canciones") 
+            pm-track(:track="t")    
     pm-footer
 </template>
 
 <script>
-const canciones = [
-  { nombre: "De mes en mes", artista: "Ricardo Arjona" },
-  { nombre: "Pinguinos en la cama", artista: "Ricardo Arjona" },
-  { nombre: "Atrevete", artista: "Calle 13" },
-  { nombre: "Nadie como tu", artista: "Calle 13" }
-];
+import trackService from "./services/track";
 import PmFooter from "./components/layout/Footer.vue";
 import PmHeader from "./components/layout/Header.vue";
+import PmTrack from "./components/Track.vue";
+import PmLoader from "./components/shared/Loader.vue";
+
 export default {
   name: "app",
   components: {
     PmFooter,
-    PmHeader
+    PmHeader,
+    PmTrack,
+    PmLoader
   },
   data() {
     return {
       canciones: [],
-      searchQuery: ""
+      searchQuery: "",
+      isLoading: false
     };
   },
   methods: {
     search() {
-      this.canciones = canciones;
+      if (!this.canciones) return;
+      this.isLoading = true;
+      trackService.search(this.searchQuery).then(res => {
+        this.canciones = res.tracks.items;
+        this.isLoading = false;
+      });
     }
   }
 };
