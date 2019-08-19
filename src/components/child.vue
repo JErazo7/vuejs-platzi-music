@@ -1,14 +1,5 @@
 <template lang="pug">
   div
-    h1 Este es un componente hijo
-    local
+    slot(name="title")
+    slot(name="body")
 </template>
-
-<script>
-import local from "./local.vue";
-export default {
-  components: {
-    local
-  }
-};
-</script>
