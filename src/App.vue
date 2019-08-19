@@ -3,7 +3,7 @@
     pm-header
     pm-loader(v-show="isLoading")
     section.section(v-show="!isLoading")
-      nav.nav.has-shadow
+      nav.nav
         .field.has-addons
           input.input.is-large(
             type="text" 
@@ -13,9 +13,13 @@
           a.button.is-danger.is-large &times
       
       .container.results
-        .colums.is-multiline
+        .columns.is-multiline
           .column.is-one-quarter(v-for= "t in canciones") 
-            pm-track(:track="t")    
+            pm-track(
+              :class="{'is-active': t.id == selectedTrack}", 
+              :track="t",
+              @select="setSelectedTrack"
+              )
     pm-footer
 </template>
 
@@ -38,7 +42,8 @@ export default {
     return {
       canciones: [],
       searchQuery: "",
-      isLoading: false
+      isLoading: false,
+      selectedTrack: ""
     };
   },
   methods: {
@@ -49,6 +54,9 @@ export default {
         this.canciones = res.tracks.items;
         this.isLoading = false;
       });
+    },
+    setSelectedTrack(id) {
+      this.selectedTrack = id;
     }
   }
 };
@@ -56,4 +64,11 @@ export default {
 
 <style lang="scss">
 @import "./scss/main.scss";
+.columns {
+  margin-top: 2em;
+}
+
+.is-active {
+  border: 3px #65d261 solid;
+}
 </style>

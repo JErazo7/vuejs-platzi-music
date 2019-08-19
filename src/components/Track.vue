@@ -7,7 +7,7 @@
         .media
             .media-left
                 figure.image.is-48x48
-                    img(:src="track.album.images[1].url")
+                    img(:src="track.album.images[2].url")
             .media-content
                 p.title.is-6
                     strong {{ track.name }}
@@ -17,13 +17,18 @@
             nav.level
                 .level-left
                     a.level-item
-                        span.icon.is-small ▶                        
+                        span.icon.is-small(@click="selectTrack") ▶                        
 </template>
 
 <script>
 export default {
   props: {
     track: { type: Object, required: true }
+  },
+  methods: {
+    selectTrack() {
+      this.$emit("select", this.track.id);
+    }
   }
 };
 </script>
