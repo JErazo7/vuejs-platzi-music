@@ -8,7 +8,10 @@ Vue.config.productionTip = false;
 Vue.use(EventBus);
 Vue.use(VueRouter);
 
-const router = new VueRouter({ routes });
+const router = new VueRouter({
+  routes,
+  mode: "history"
+});
 
 new Vue({
   render: h => h(App),
