@@ -5,13 +5,13 @@
       figure.media-left
         p.image
           img(:src="track.album.images[0].url")
-        p
+        p.button-bar
           a.button.is-primary.is-large
             span.icon(@click="selectTrack") ▶
     .column.is-8
       .panel
         .panel-heading
-          h1.title {{ track.name }}
+          h1.title {{ trackTitle }}
         .panel-block
           article.media
             .media-content
@@ -26,18 +26,22 @@
       
 </template>
 <script>
-import TrackService from "../services/track";
 import TrackMixin from "../mixins/track";
+import { mapState, mapActions, mapGetters } from "vuex";
 export default {
   mixins: [TrackMixin],
-  data() {
-    return {
-      track: {}
-    };
-  },
   created() {
     const id = this.$route.params.id;
-    TrackService.getById(id).then(res => (this.track = res));
+    if (!this.track || !this.track.id || this.track.id !== id) {
+      this.getTrackById({ id });
+    }
+  },
+  computed: {
+    ...mapState(["track"]),
+    ...mapGetters(["trackTitle"])
+  },
+  methods: {
+    ...mapActions(["getTrackById"])
   }
 };
 </script>
@@ -45,5 +49,8 @@ export default {
 <style lang="scss" scoped>
 .columns {
   margin: 20px;
+}
+.button-bar {
+  margin-top: 20px;
 }
 </style>
